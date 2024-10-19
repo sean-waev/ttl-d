@@ -140,7 +140,9 @@ const mappedUsers = users
                                   index + 1
                                 }.</span></td>
                                
-                                <td class="title"><span style="color: black;" class="titleline" ><span style='font-size:11px; color: black;'>&#9650; </span><a style="color: black;"
+                                <td class="title"><span style="color: black;" class="titleline" ><span style='font-size:11px; color: black;'><img
+                                                    src="./Hacker News_files/tpp.png" height="18"
+                                                    style="margin-right:8px;"></span><a style="color: black;"
                                             href="${user.url}">${
       user.title
     }</a><span
