@@ -134,7 +134,7 @@ async function main() {
                                                      | <a rel="nofollow">context</a> </span>
                                             </span></div><br>
                                         <div class="comment">
-                                            <a href="./comment_individual.html">
+                                            <a >
                                                 <div class="commtext c00">${user.comment}</div>
                                             </a>
                                             <div class="reply"></div>
