@@ -92,7 +92,7 @@
 
 </body>
 <script>
-     const username = localStorage.getItem("username");
+    const username = localStorage.getItem("username");
     console.log(username);
     let header = (username === "null" || username === null)? "" : `${username} |`
     let button = (username === "null" || username === null) ? "login" : "Logout";
@@ -102,7 +102,7 @@
 
     function clickLog() {
 
-        if (username !== "null" || username !== null) {
+        if (username !== "null") {
             localStorage.setItem("username", null);
             localStorage.setItem("accesstoken", null);
             window.location.href = "./index.html";
@@ -113,7 +113,7 @@
 
     function clickSubmit() {
 
-        if (username !== "null" || username !== null) {
+        if (username !== "null") {
             window.location.href = "./submit.html";
         } else {
             window.location.href = "./login.html";
