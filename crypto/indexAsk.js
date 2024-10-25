@@ -114,7 +114,7 @@ async function main() {
                                     index + 1
                                   }.</span></td>
                                  
-                                  <td class="title"><span style="color: black;" class="titleline" ><span style='font-size:11px; color: black;'><img
+                                  <td class="title"><span class="titleline" ><span style='font-size:11px;'><img
                                                       src="./Hacker News_files/tpp.png" height="18"
                                                       style="margin-right:8px;"></span><a style="color: black;"
                                              >${
