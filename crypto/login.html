@@ -8,36 +8,37 @@
 
 <body>
     <b>Login</b><br><br>
-    <form action="login" method="post"><input type="hidden" name="goto" value="user?id=seanmcd311">
+
         <table border="0">
             <tr>
                 <td>username:</td>
-                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off"
+                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off" id="username"
                         autofocus="true"></td>
             </tr>
             <tr>
                 <td>password:</td>
-                <td><input type="password" name="pw" size="20"></td>
+                <td><input type="password" name="pw" size="20" id="password"></td>
             </tr>
         </table><br>
-        <input type="submit" value="login">
-    </form><a href="forgot">Forgot your password?</a><br><br>
+        <button onclick="submitLogin()">Login</button>
+  <a href="forgot">Forgot your password?</a><br><br>
     <b>Create Account</b><br><br>
-    <form action="login" method="post"><input type="hidden" name="goto" value="user?id=seanmcd311"><input type="hidden"
+   <input type="hidden"
             name="creating" value="t">
         <table border="0">
             <tr>
                 <td>username:</td>
-                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off">
+                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off" id="reg_username">
                 </td>
             </tr>
             <tr>
                 <td>password:</td>
-                <td><input type="password" name="pw" size="20"></td>
+                <td><input type="password" name="pw" size="20" id="reg_password"></td>
             </tr>
         </table><br>
-        <input type="submit" value="create account">
-    </form>
+        <button onclick="submitRegister()">Create Account</button>
 </body>
+
+<script src="indexLogin.js"></script>
 
 </html>
