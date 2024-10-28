@@ -1,7 +1,8 @@
 // const userss = fetch(items/main);
 
 // Replace with your actual Heroku API endpoint
-const API_URL = "https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/comments/newest";
+const API_URL =
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/comments/newest";
 
 // Example function to get data from your API
 async function fetchData() {
@@ -30,6 +31,82 @@ async function fetchData() {
   }
 }
 
+async function deleteComment(id) {
+  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/${id}`;
+  try {
+    const response = await fetch(UPVOTE_URL, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the API response data
+        console.log(data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error:", error);
+      });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("from within:", data);
+    return data;
+    // Use this data as needed in your frontend
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
+async function deleteReply(id) {
+  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/${id}`;
+  try {
+    const response = await fetch(UPVOTE_URL, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the API response data
+        console.log(data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error:", error);
+      });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("from within:", data);
+    return data;
+    // Use this data as needed in your frontend
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
 // An async function to access data outside fetchData
 async function main() {
   const users = await fetchData();
@@ -39,50 +116,196 @@ async function main() {
   function stripToDomain(url) {
     const urlObj = new URL(url);
     const hostname = urlObj.hostname;
-  
+
     // Remove 'www.' if present
     const domain = hostname.replace(/^www\./, "");
-  
+
     // Split by '.' and get the last two parts
     const parts = domain.split(".");
     const domainCom = parts.slice(-2).join(".");
-  
+
     return domainCom;
   }
-  
-  function vote(id) {
-    if (users.upvoteSubmissions.find(id) === true) {
-      // fetch(`downvote/${id}`)
-      // content-type: application/json
-  
-      // {
-      //    "currentUserName": get.localStorage(currentUser)
-      // }
-  
-      return `
-      <span style='font-size:11px; color: black;'><img
-                                                      src="./Hacker News_files/tpp.png" height="18"
-                                                      style="margin-right:8px;"></span>`;
-    } else {
-      // fetch(`upvote/${id}`)
-      // content-type: application/json
-  
-      // {
-      //    "currentUserName": get.localStorage(currentUser)
-      // }
-  
-      return `
-      <span style='font-size:11px; color: black;'><img
-                                                      src="./Hacker News_files/tpp.png" height="18"
-                                                      style="margin-right:8px; display: hidden"></span>`;
+
+  async function UpVoteComment(id) {
+    const username = localStorage.getItem("username");
+
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/upVote/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserName: username,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
     }
   }
-  
+
+  async function DownVoteComment(id) {
+    const username = localStorage.getItem("username");
+
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/downVote/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserName: username,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+  async function UpVoteReply(id) {
+    const username = localStorage.getItem("username");
+
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/upVote/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserName: username,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+
+  async function DownVoteReply(id) {
+    const username = localStorage.getItem("username");
+
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/downVote/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserName: username,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
-  
+
     var interval = seconds / 31536000;
-  
+
     if (interval > 1) {
       return Math.floor(interval) + " years ago";
     }
@@ -104,58 +327,384 @@ async function main() {
     }
     return Math.floor(seconds) + " seconds ago";
   }
-  
+  async function fetchReplies(itemReplies, index1) {
+    console.log("iran1");
+    const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/replies/findbyIds`;
+    try {
+      const response = await fetch(USER_URL, {
+        method: "POST", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+        headers: {
+          "Content-Type": "application/json",
+          // Add any required headers, like authorization, here if needed
+        },
+        body: JSON.stringify({
+          replies: itemReplies,
+        }),
+      });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const datas = await response.json();
+      console.log("from within111:", datas);
+      const currentUserMap = localStorage.getItem("username");
+      const mappedReplies = datas
+        .map((data, index) => {
+          if (data) {
+            return `<tr class="athing" id="41790045">
+            
+                 
+                
+              <div>
+                  <td class="default">
+                
+                      <div style=" margin-bottom:-10px;"><span class="comhead">
+                      <a id="up_41790045" style="
+      cursor: default;">
+                              <span
+                                  style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img id="${
+                                    data._id
+                                  }"
+                                  src="./Hacker News_files/tpp.png" height="18" class="cnReplyUpVote"
+                                  style="margin-right:8px;"></span>
+                          </a>
+                              <a class="cnUser">${
+                                data ? data?.author : ""
+                              }</a> <span class="age"
+                                  title="2024-10-09T16:55:00.000000Z"><a style="pointer-events: none;
+      cursor: default;">
+                                  | ${timeSince(
+                                    new Date(data?.createdAt)
+                                  )}</a></span> <span style="pointer-events: none;
+      cursor: default;"> | ${data.points} points</span> 
+                                  <span id="unv_41790045" style="pointer-events: none;
+      cursor: default;"></span>  <a  class="replyFlags" id="${
+        data._id
+      }[" style="visibility: ${
+              currentUserMap
+                ? currentUserMap === "null"
+                  ? "hidden"
+                  : "visible"
+                : "hidden"
+            }">| ${data.author === currentUserMap ? "delete?" : "flag?"}</a>
+                                   <a style="visibility: hidden;" id="${
+                                     data._id
+                                   }$" class="cnReplyDownVote"> 
+                                   | unvote
+                                 </a>
+                          </span></div><br>
+                      <div class="comment">
+                          <a>
+                              <div class="commtext c00" style="margin-left:40px;">${
+                                data?.reply
+                              }</div>
+                          </a>
+                          
+                      </div>
+                  </td>
+               </div>
+              </tr>
+    <div style="height: 8px;"></div>
+    `;
+          } else {
+            return "";
+          }
+        })
+        .join("");
+      if (document.getElementById(`replies${index1}`)) {
+        document.getElementById(`replies${index1}`).innerHTML = mappedReplies;
+      }
+
+      const ReplyVoteElements = document.querySelectorAll(".cnReplyUpVote");
+
+      await fetchCurrentUser1();
+
+      ReplyVoteElements.forEach((voteElement, index) => {
+        voteElement.addEventListener("click", () => {
+          console.log("im vlivk!!");
+          const username = localStorage.getItem("username");
+          if (!username || username === "null") {
+            window.location.href = "./login.html";
+          }
+
+          console.log(voteElement.id);
+          console.log(index);
+
+          voteElement.style.visibility = "hidden";
+          UpVoteReply(voteElement.id);
+          const unvoteE = document.getElementById(`${voteElement.id}$`);
+
+          unvoteE.style.visibility = "visible";
+        });
+      });
+      const replyFlags = document.querySelectorAll(".replyFlags");
+
+      replyFlags.forEach((element) => {
+        element.addEventListener("click", () => {
+          if (element.textContent === "delete?") {
+            element.textContent = "deleted";
+          } else {
+            element.textContent = "flagged";
+          }
+          const itemId = element.id.replace("[", "");
+          deleteReply(itemId);
+        });
+      });
+      const ReplyUnVoteElements = document.querySelectorAll(".cnReplyDownVote");
+
+      ReplyUnVoteElements.forEach((unvoteElement, index) => {
+        unvoteElement.addEventListener("click", () => {
+          console.log(unvoteElement.id);
+          const itemId = unvoteElement.id.replace("$", "");
+          console.log(itemId);
+
+          unvoteElement.style.visibility = "hidden";
+
+          DownVoteReply(itemId);
+
+          upVoteElement = document.getElementById(itemId);
+
+          upVoteElement.style.visibility = "visible";
+        });
+
+        // Add click listeners to .cnUser elements
+        const elements = document.querySelectorAll(".cnUser");
+        elements.forEach((element) => {
+          element.addEventListener("click", () => {
+            console.log(element.textContent);
+            localStorage.setItem("SelectedUser", element.textContent);
+            window.location.href = "./user_individual.html";
+          });
+        });
+      });
+
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
   // const response = await fetch("https://example.org/products.json").json();
-  
+
   // ex = getData();
-  
+  const currentUserMap = localStorage.getItem("username");
   const mappedUsers = users
     .map((user, index) => {
+      if (user.replies.length > 0) {
+        fetchReplies(user.replies, user._id);
+      }
+
       return `<tr class="athing" id="41790045">
-                                  <div>
-                                    <td valign="top" class="votelinks">
-                                       <a id="up_41790045" class="clicky">
-                                                <span
-                                                    style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img
-                                                    src="./Hacker News_files/tpp.png" height="18"
-                                                    style="margin-right:8px;"></span>
-                                            </a>
-                                    </td>
-                                    </div>
-                                <div>
-                                    <td class="default">
-                                        <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
-                                                <a class="hnuser">${user.author}</a> <span class="age"
-                                                    title="2024-10-09T16:55:00.000000Z"><a>
-                                                    ${timeSince(
-                                                      new Date(user.createdAt)
-                                                    )}</a></span> <span id="unv_41790045"></span> <span
-                                                    class="navs">
-                                                     | <a rel="nofollow">context</a> </span>
-                                            </span></div><br>
-                                        <div class="comment">
-                                            <a >
-                                                <div class="commtext c00">${user.comment}</div>
-                                            </a>
-                                            <div class="reply"></div>
-                                        </div>
-                                    </td>
-                                 </div>
-                                </tr>
-                  <br>
-                  <div style="height: 8px;"></div>
+        
+             
+            
+          <div>
+              <td class="default">
+            
+                  <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
+                  <a id="up_41790045" class="clicky">
+                          <span
+                              style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img id="${
+                                user._id
+                              }"
+                              src="./Hacker News_files/tpp.png" height="18" class="cnCommentUpVote"
+                              style="margin-right:8px;"></span>
+                      </a>
+                          <a id="user${index}" class="cnUser">${
+        user ? user?.author : ""
+      }</a> <span class="age"
+                              title="2024-10-09T16:55:00.000000Z" style="pointer-events: none;
+  cursor: default;"><a> | 
+                              ${timeSince(
+                                new Date(user?.createdAt)
+                              )}</a></span> <span style="pointer-events: none;
+  cursor: default;"> | ${user.points} points</span> 
+                              <span id="unv_41790045"></span> 
+                              <span ><a class="cnContext" id="${
+                                user?.item
+                              }%"> | context</a></span> 
+                              <span id="unv_41790045"></span> 
+                               <a  class="flags" id="${
+                                 user._id
+                               }[" style="visibility: ${
+        currentUserMap
+          ? currentUserMap === "null"
+            ? "hidden"
+            : "visible"
+          : "hidden"
+      }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a>
+                               <a style="visibility: hidden;" id="${
+                                 user._id
+                               }$" class="cnCommentDownVote"> 
+                               | unvote
+                             </a>
+                      </span></div><br>
+                  <div class="comment">
+                      <a>
+                          <div class="commtext c00" style="margin-left:40px;">${
+                            user?.comment
+                          }</div>
+                      </a>
+                      <div  style="margin-left:40px;">        <p><font size="1">
+                      <u><a class="reply" id="${
+                        user._id
+                      }&"rel="nofollow">reply</a></u>
+                  </font>
+      </p></div>
+                  </div>
+              </td>
+           </div>
+          </tr>
+
+<div style="margin-left:40px;"id="replies${user._id}"></div>
+<div style="height: 8px;"></div>
                   `;
     })
     .join("");
-  
+
   document.getElementById("container").innerHTML = mappedUsers;
+  // Add click listeners to .cnUser elements
+  const elements = document.querySelectorAll(".cnUser");
+  elements.forEach((element) => {
+    element.addEventListener("click", () => {
+      console.log(element.textContent);
+      localStorage.setItem("SelectedUser", element.textContent);
+      window.location.href = "./user_individual.html";
+    });
+  });
+  const flags = document.querySelectorAll(".flags");
 
+  flags.forEach((element) => {
+    element.addEventListener("click", () => {
+      if (element.textContent === "delete?") {
+        element.textContent = "deleted";
+      } else {
+        element.textContent = "flagged";
+      }
+      const itemId = element.id.replace("[", "");
+      deleteComment(itemId);
+    });
+  });
+  const commentUpVoteElements = document.querySelectorAll(".cnCommentUpVote");
 
+  commentUpVoteElements.forEach((commentUpVoteElement, index) => {
+    commentUpVoteElement.addEventListener("click", () => {
+      const username = localStorage.getItem("username");
+      if (!username || username === "null") {
+        window.location.href = "./login.html";
+      }
 
+      console.log(commentUpVoteElement.id);
+      console.log(index);
+
+      commentUpVoteElement.style.visibility = "hidden";
+      UpVoteComment(commentUpVoteElement.id);
+      const unvoteE = document.getElementById(`${commentUpVoteElement.id}$`);
+
+      unvoteE.style.visibility = "visible";
+    });
+  });
+
+  const commentUnVoteElements = document.querySelectorAll(".cnCommentDownVote");
+
+  commentUnVoteElements.forEach((commentUnVoteElement, index) => {
+    commentUnVoteElement.addEventListener("click", () => {
+      console.log(commentUnVoteElement.id);
+      const itemId = commentUnVoteElement.id.replace("$", "");
+      console.log(itemId);
+
+      commentUnVoteElement.style.visibility = "hidden";
+
+      DownVoteComment(itemId);
+
+      upVoteElement = document.getElementById(itemId);
+
+      upVoteElement.style.visibility = "visible";
+    });
+  });
+  const repls = document.querySelectorAll(".reply");
+  repls.forEach((element) => {
+    element.addEventListener("click", () => {
+      console.log(element.textContent);
+      const commentId = element.id.replace("&", "");
+      localStorage.setItem("selectedCommentIn", commentId);
+      window.location.href = "./comment_individual.html";
+    });
+  });
+
+  const contexts = document.querySelectorAll(".cnContext");
+
+  contexts.forEach((context) => {
+    context.addEventListener("click", () => {
+      const itemId = context.id.replace("%", "");
+
+      localStorage.setItem("selectedItem", itemId);
+      window.location.href = "./news_individual.html";
+    });
+  });
 }
 
 main(); // Call main to execute and retrieve the data
 
+async function fetchCurrentUser1() {
+  const username = localStorage.getItem("username");
+  console.log("iran");
+  const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/users/findProtected/${username}`;
+  try {
+    const response = await fetch(USER_URL, {
+      method: "GET", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+      headers: {
+        "Content-Type": "application/json",
+        // Add any required headers, like authorization, here if needed
+      },
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("from within111:", data);
+
+    const voteElements = document.querySelectorAll(".cnUpVote");
+    voteElements.forEach((voteElement) => {
+      if (data.upvotedSubmissions.includes(voteElement.id)) {
+        voteElement.style.visibility = "hidden";
+        const unvoteE = document.getElementById(`${voteElement.id}$`);
+
+        unvoteE.style.visibility = "visible";
+      }
+    });
+    const commentVoteElements = document.querySelectorAll(".cnCommentUpVote");
+    commentVoteElements.forEach((voteElement) => {
+      if (data.upvotedSubmissions.includes(voteElement.id)) {
+        voteElement.style.visibility = "hidden";
+        const unvoteE = document.getElementById(`${voteElement.id}$`);
+
+        unvoteE.style.visibility = "visible";
+      }
+    });
+    const ReplyVoteElements = document.querySelectorAll(".cnReplyUpVote");
+    console.log("checkcheckcehck:", ReplyVoteElements);
+    ReplyVoteElements.forEach((voteElement, index) => {
+      if (data.upvotedSubmissions.includes(voteElement.id)) {
+        voteElement.style.visibility = "hidden";
+        const unvoteE = document.getElementById(`${voteElement.id}$`);
+
+        unvoteE.style.visibility = "visible";
+      }
+    });
+    return data;
+    // Use this data as needed in your frontend
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
+fetchCurrentUser1();
 
 // async function fetchData() {
 //   try {
@@ -284,4 +833,3 @@ main(); // Call main to execute and retrieve the data
 //     __v: 0,
 //   },
 // ];
-
