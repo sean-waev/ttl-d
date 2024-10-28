@@ -10,7 +10,6 @@
     <title>Crypto News</title>
 </head>
 
-
 <body>
     <center>
         <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f5f8f8">
@@ -20,10 +19,8 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
                             <tbody>
                                 <tr>
-                                    <td style="width:18px;padding-right:4px"><a href="./index.html"><img
-                                                src="./Hacker News_files/ttl.png" height="18"
-                                                style="border:1px white solid; display:block"></a></td>
-                                    <td style="line-height:12pt; height:10px;"><span class="pagetop"
+
+                                    <td style="line-height:12pt; height:18px;"><span class="pagetop"
                                             style="color: white;"><b class="hnname" style="color: white;"><a
                                                     style="color: white;" href="./index.html">Crypto
                                                     News</a></b>
@@ -32,11 +29,16 @@
                                                 style="color: white;" href="./cn_ask.html">ask</a>
                                             | <a style="color: white;" href="./cn_show.html">show</a> | <a
                                                 style="color: white;" href="./cn_jobs.html">jobs</a> | <a
-                                                style="color: white;" href="./submit.html"
-                                                rel="nofollow">submit</a>
+                                                style="color: white;" onclick="clickSubmit()" rel="nofollow">submit</a>
                                         </span></td>
                                     <td style="text-align:right;padding-right:4px;"><span class="pagetop"
-                                            style="color: white;">login
+                                            style="color: white; display: -webkit-inline-box;">
+                                            <div id="log">
+
+                                            </div>
+                                            <a style="padding-left:5px; color: white;" id="loginButton"
+                                                onclick="clickLog()"></a>
+                                            <!-- username ? `${username} |` : "login" -->
                                             <!-- <a style="color: white;" id="me" href="./profile.html">seanmcd311</a> (<span
                                                 style="color: white;" id="karma">1</span>) | <a id="logout"
                                                 rel="nofollow" style="color: white;" href="./login.html">logout</a> -->
@@ -49,78 +51,85 @@
                 <tr id="pagespace" title="" style="height:10px"></tr>
                 <tr>
                     <td>
-                        <table border="0" cellpadding="0" cellspacing="0">
+                        <table border="0" cellpadding="0" cellspacing="0" style="    margin-left: 10px;">
                             <tbody>
-                                <tr class="athing" id="41790045">
-                                    <td class="ind"></td>
-                                    <td valign="top" class="votelinks">
-                                        <center><a id="up_41790045" class="clicky">
-                                            <span
-                                                    style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img
-                                                    src="./Hacker News_files/tpp.png" height="18"
-                                                    style="margin-right:8px;"></span>
-                                            </a></center>
-                                    </td>
-                                    <td class="default">
-                                        <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
-                                                <a class="hnuser">eviks</a> <span class="age"
-                                                    title="2024-10-09T16:55:00.000000Z"><a>6
-                                                        minutes ago</a></span> <span id="unv_41790045"></span> <span
-                                                    class="navs">
-                                                    | <a>parent</a> | <a rel="nofollow">context</a><span
-                                                        class="onstory"> | on: <a>European govt
-                                                            air-gapped systems breached using cu...</a></span> </span>
-                                            </span></div><br>
-                                        <div class="comment">
-                                            <div class="commtext c00">How would you get data or even the OS itself to
-                                                the machine under your definition?</div>
-                                            <div class="reply"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="height:10px"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"></td>
-                                    <td>
-                                        <form action="comment" method="post"><input type="hidden" name="parent"
-                                                value="41790082"><input type="hidden" name="goto"
-                                                value="item?id=41790082"><input type="hidden" name="hmac"
-                                                value="822dfeec88f2ea606812624cd6026e222d407362"><textarea name="text"
-                                                rows="8" cols="80" wrap="virtual"></textarea><br><br>
-                                            <input type="submit" value="reply" disabled>
-                                        </form>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="./Hacker News_files/s.gif" height="10" width="0">
-                        <table width="100%" cellspacing="0" cellpadding="1">
-                            <tbody>
-                                <tr>
-                                    <td bgcolor="#053eff"></td>
-                                </tr>
-                            </tbody>
-                        </table><br>
-                        <center><br>
-                            <!-- <form method="get" action="https://hn.algolia.com/">Search: <input type="text" name="q" size="17"
-                            autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off"></form> -->
-                        </center>
-                    </td>
+                                <td>
+                                    <table class="fatitem" border="0">
+                                        <tbody>
+                                            <div id="container111"></div>
+                                            <td colspan="2"></td>
+                                            <td>
+                                               <textarea name="text" id="reply"
+                                                    rows="8" cols="80" wrap="virtual"></textarea><br><br>
+                                                    <button onclick="submitReply()">Reply</button>
+                                   
+                                            </td>
                 </tr>
             </tbody>
+        </table><br><br>
+        <table border="0" class="comment-tree">
+            <tbody>
+                <div id="commentsIndex" style="margin-left: 3vw;"></div>
+            </tbody>
+        </table>
+        <br><br>
+        </td>
+
+        </tbody>
+        </table>
+        </td>
+        </tr>
+        <tr>
+            <td><img src="./Hacker News_files/s.gif" height="10" width="0">
+                <table width="100%" cellspacing="0" cellpadding="1">
+                    <tbody>
+                        <tr>
+                            <td bgcolor="#053eff"></td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                <center><br>
+
+                </center>
+            </td>
+        </tr>
+        </tbody>
         </table>
     </center>
 
-    <script type="text/javascript" src="./Hacker News_files/hn.js"></script>
+    <script src="./indexCommentIndividual.js"></script>
 
 </body>
+<script>
+    const username = localStorage.getItem("username");
+    console.log(username);
+    let header = username === "null" ? "" : `${username} |`
+    let button = username === "null" ? "login" : "Logout";
+    console.log("header:", header);
+    document.getElementById("log").innerText = header;
+    document.getElementById("loginButton").innerText = button;
 
-<script src="index.js"></script>
+    function clickLog() {
+
+        if (username !== "null") {
+            localStorage.setItem("username", null);
+            localStorage.setItem("accesstoken", null);
+            window.location.href = "./index.html";
+        } else {
+            window.location.href = "./login.html";
+        }
+    }
+
+    function clickSubmit() {
+
+        if (username !== "null") {
+            window.location.href = "./submit.html";
+        } else {
+            window.location.href = "./login.html";
+        }
+    }
+
+
+</script>
 
 </html>
