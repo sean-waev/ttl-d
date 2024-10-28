@@ -32,7 +32,7 @@ async function fetchData() {
 }
 
 async function deleteComment(id) {
-  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/${id}`;
+  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/${id}`;
   try {
     const response = await fetch(UPVOTE_URL, {
       method: "DELETE",
@@ -70,7 +70,7 @@ async function deleteComment(id) {
   }
 }
 async function deleteReply(id) {
-  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/${id}`;
+  const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/${id}`;
   try {
     const response = await fetch(UPVOTE_URL, {
       method: "DELETE",
