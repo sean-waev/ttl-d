@@ -20,7 +20,7 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
                             <tbody>
                                 <tr>
-                                  
+
                                     <td style="line-height:12pt; height:18px;"><span class="pagetop"
                                             style="color: white;"><b class="hnname" style="color: white;"><a
                                                     style="color: white;" href="./index.html">Crypto
@@ -32,7 +32,7 @@
                                                 style="color: white;" href="./cn_jobs.html">jobs</a> | <a
                                                 style="color: white;" onclick="clickSubmit()" rel="nofollow">submit</a>
                                         </span></td>
-                                        <td style="text-align:right;padding-right:4px;"><span class="pagetop"
+                                    <td style="text-align:right;padding-right:4px;"><span class="pagetop"
                                             style="color: white; display: -webkit-inline-box;">
                                             <div id="log">
 
@@ -84,13 +84,13 @@
                                         </div>
                                     </td>
                                 </tr> -->
-                                <div id="container" style="display: flex;"></div>
+                                <div id="container" style="margin-left: 1vw;"></div>
                             </tbody>
                         </table>
                         <div id="pagination-controls" style="padding-top: 10px;padding-left: 20px; color: black">
                             <!-- <button id="prev-page" onclick="changePage(currentPage - 1)">Previous</button> -->
-        
-                            <div id="next-page" onclick="changePage(currentPage + 1)">More</div>
+
+                            <div id="next-page" onclick="changePage(currentPage + 1)" style="visibility: hidden;">More</div>
                         </div>
                     </td>
                 </tr>
@@ -119,8 +119,8 @@
 <script>
     const username = localStorage.getItem("username");
     console.log(username);
-    let header = username === "null"? "" : `${username} |`
-    let button = username === "null"? "login" : "Logout";
+    let header = username === "null" ? "" : `${username} |`
+    let button = username === "null" ? "login" : "Logout";
     console.log("header:", header);
     document.getElementById("log").innerText = header;
     document.getElementById("loginButton").innerText = button;
@@ -131,19 +131,19 @@
             localStorage.setItem("username", null);
             localStorage.setItem("accesstoken", null);
             window.location.href = "./index.html";
-        }else{
+        } else {
             window.location.href = "./login.html";
         }
     }
 
     function clickSubmit() {
 
-if (username !== "null") {
-    window.location.href = "./submit.html";
-}else{
-    window.location.href = "./login.html";
-}
-}
+        if (username !== "null") {
+            window.location.href = "./submit.html";
+        } else {
+            window.location.href = "./login.html";
+        }
+    }
 
 
 </script>
