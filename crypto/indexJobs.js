@@ -1,7 +1,8 @@
 // const userss = fetch(items/main);
 
 // Replace with your actual Heroku API endpoint
-const API_URL = "https://crypto-api-3-6bf97d4979d1.herokuapp.com/jobs/jobs/newest";
+const API_URL =
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/jobs/jobs/newest";
 
 // Example function to get data from your API
 async function fetchData() {
@@ -110,11 +111,11 @@ async function main() {
   const mappedUsers = users
     .map((user, index) => {
       return `<tr class="athing" >
-                                  <td align="right" valign="top" class="title"><span style="color: black;" class="rank">${
-                                    index + 1
-                                  }.</span></td>
+                                  <td align="right" valign="top" class="title"></td>
                                  
-                                  <td class="title"><span style="color: black;" class="titleline" ><span style='font-size:11px; color: black; margin-right:11px;'></span><a style="color: black;"
+                                  <td class="title"><span style="color: black;display: flex; gap:5px;" class="titleline" ><span style="color: black;" class="rank">${
+                                    index + 1
+                                  }.</span><span style='font-size:11px; color: black; margin-right:11px;'></span><a style="color: black;"
                                               href="${user.url}">${
         user.title
       }</a> <span
@@ -135,11 +136,10 @@ async function main() {
       }</span></span>
                                   </td>
                   </tr>
-                  <br>
                   <div style="height: 3px;"></div>
                   <tr>
                       <td colspan="2">
-                      <td class="subtext"><span class="subline" style="margin-left: 30px;
+                      <td class="subtext"><span class="subline" style="margin-left: 35px;
       font-size: 10px;">
                             
                               <span class="age" title="2024-06-29T17:39:16"><a >${timeSince(
