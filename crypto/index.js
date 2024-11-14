@@ -1,14 +1,18 @@
-const API_URL = "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items/main";
+const API_URL =
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items/main/pages";
 
 // Example function to get data from your API
-async function fetchData() {
+async function fetchData(pageNum) {
   try {
     const response = await fetch(API_URL, {
-      method: "GET", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+      method: "PUT", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
       headers: {
         "Content-Type": "application/json",
         // Add any required headers, like authorization, here if needed
       },
+      body: JSON.stringify({
+        pageNumber: pageNum || 0,
+      }),
     });
 
     console.log(response);
@@ -18,7 +22,6 @@ async function fetchData() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -43,7 +46,6 @@ async function deleteItem(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -57,7 +59,6 @@ async function deleteItem(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -87,7 +88,6 @@ async function UpVote(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -101,7 +101,6 @@ async function UpVote(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -131,7 +130,6 @@ async function DownVote(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -145,7 +143,6 @@ async function DownVote(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -155,21 +152,42 @@ async function DownVote(id) {
 
 // An async function to access data outside fetchData
 async function main() {
-  const users = await fetchData();
-  console.log("From outside:", users); // Here data can be used as a constant
+  // localStorage.setItem("pageNumber", 0);
+  const pageNumberInput = localStorage.getItem("pageNumber");
+
+  const numberInput = parseInt(pageNumberInput) || 0;
+
+  const users = await fetchData(numberInput);
+
+  if (users.length < 30) {
+    //hide more
+
+    const moreButton = document.getElementById("next-page");
+    moreButton.style.display = "none";
+  }
+
+  if (numberInput === 0) {
+    //hide back
+    const moreButton = document.getElementById("back-page");
+    moreButton.style.display = "none";
+  }
+
 
   function stripToDomain(url) {
-    const urlObj = new URL(url);
-    const hostname = urlObj.hostname;
+    if (url.includes("www.")) {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname;
 
-    // Remove 'www.' if present
-    const domain = hostname.replace(/^www\./, "");
+      // Remove 'www.' if present
+      const domain = hostname.replace(/^www\./, "");
 
-    // Split by '.' and get the last two parts
-    const parts = domain.split(".");
-    const domainCom = parts.slice(-2).join(".");
+      // Split by '.' and get the last two parts
+      const parts = domain.split(".");
+      const domainCom = parts.slice(-2).join(".");
 
-    return domainCom;
+      return domainCom;
+    }
+    return "";
   }
 
   function timeSince(date) {
@@ -219,8 +237,8 @@ async function main() {
                                   
                                  
                                   <td class="title"><span style="color: black; display:flex; gap:5px;" class="titleline" ><span style="color: black;min-width: 23px;" class="rank">${
-                                    index + 1
-                                  }.</span><span style='font-size:11px; color: black;'><img id="${
+                                    index + 1 + numberInput * 30
+                                  }.</span><span style='font-size:11px; color: black;'><img  style="cursor: pointer;"id="${
           user._id
         }" class="cnUpVote"
                                                       src="./Hacker News_files/tpp.png" height="18"
@@ -229,7 +247,12 @@ async function main() {
           user.title
         }</a> <span
                                               class="sitebit comhead"> ${
-                                                user.url ? "(" : ""
+                                                user.url
+                                                  ? stripToDomain(user.url) ===
+                                                    ""
+                                                    ? ""
+                                                    : "("
+                                                  : ""
                                               }<a style="color: black;"
                                                   href="${
                                                     user.url
@@ -241,7 +264,7 @@ async function main() {
                                                             )
                                                           : ""
                                                       }</span></a>${
-          user.url ? ")" : ""
+          user.url ? (stripToDomain(user.url) === "" ? "" : ")") : ""
         }</span></span>
                                   </td>
                   </tr>
@@ -253,24 +276,24 @@ async function main() {
                               <span class="score" id="score_40832214">${
                                 user.points
                               } points</span> | by <a id="user${index}"
-                                  class="cnUser" >${user.author}</a>
+                                  class="cnUser" style="cursor: pointer;">${user.author}</a>
                               <span class="age" title="2024-06-29T17:39:16"><a >| ${timeSince(
                                 new Date(user.createdAt)
                               )}</a></span> <span id="unv_40832214"></span> 
-                              | <a class="cnComment" id="${user._id}*">${
+                              | <a class="cnComment" id="${user._id}*" style="cursor: pointer;">${
           user.comments?.length | 0
         }&nbsp;comments</a> 
         
-         <a  class="flag" id="${user._id}[" style="visibility: ${
+         <a  class="flag" style="cursor: pointer;" id="${user._id}[" style="visibility: ${
           currentUserMap
             ? currentUserMap === "null"
               ? "hidden"
               : "visible"
             : "hidden"
         }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a>
-                              <a style="visibility: hidden;" id="${
+                              <a style="visibility: hidden;cursor: pointer;" id="${
                                 user._id
-                              }$" class="cnDownVote"> 
+                              }$" class="cnDownVote" > 
                                | unvote
                              </a>
                           </span>
@@ -291,7 +314,6 @@ async function main() {
   const elements = document.querySelectorAll(".cnUser");
   elements.forEach((element) => {
     element.addEventListener("click", () => {
-      console.log(element.textContent);
       localStorage.setItem("SelectedUser", element.textContent);
       window.location.href = "./user_individual.html";
     });
@@ -301,10 +323,10 @@ async function main() {
 
   flags.forEach((element) => {
     element.addEventListener("click", () => {
-      if (element.textContent === "delete?") {
-        element.textContent = "deleted";
+      if (element.textContent === "| delete?") {
+        element.textContent = "| deleted";
       } else {
-        element.textContent = "flagged";
+        element.textContent = "| flagged";
       }
       const itemId = element.id.replace("[", "");
       deleteItem(itemId);
@@ -323,8 +345,7 @@ async function main() {
         window.location.href = "./login.html";
       }
 
-      console.log(voteElement.id);
-      console.log(index);
+
 
       voteElement.style.visibility = "hidden";
       UpVote(voteElement.id);
@@ -338,9 +359,7 @@ async function main() {
 
   unvoteElements.forEach((unvoteElement, index) => {
     unvoteElement.addEventListener("click", () => {
-      console.log(unvoteElement.id);
       const itemId = unvoteElement.id.replace("$", "");
-      console.log(itemId);
 
       unvoteElement.style.visibility = "hidden";
 
@@ -360,12 +379,31 @@ async function main() {
       window.location.href = "./news_individual.html";
     });
   });
+  // Add event listener for the change email button
+  const addEmailButtonEvent = document.getElementById("next-page");
+  addEmailButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumber");
 
+    const num = parseInt(page);
+
+    localStorage.setItem("pageNumber", num ? num + 1 : 1);
+    window.location.href = "./index.html";
+  });
+
+  // Add event listener for the change email button
+  const addbackButtonEvent = document.getElementById("back-page");
+  addbackButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumber");
+
+    const num = parseInt(page);
+
+    localStorage.setItem("pageNumber", num - 1);
+    window.location.href = "./index.html";
+  });
   // // Add click listeners to .cnUser elements
   // const elements = document.querySelectorAll(".cnUser");
   // elements.forEach((element) => {
   //   element.addEventListener("click", () => {
-  //     console.log(element.textContent);
   //     localStorage.setItem("SelectedUser", element.textContent);
   //     window.location.href = "./user_individual.html";
   //   });
@@ -375,7 +413,6 @@ async function main() {
 main(); // Call main to execute and retrieve the data
 async function fetchCurrentUser1() {
   const username = localStorage.getItem("username");
-  console.log("iran");
   const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/users/findProtected/${username}`;
   try {
     const response = await fetch(USER_URL, {
@@ -386,14 +423,12 @@ async function fetchCurrentUser1() {
       },
     });
 
-    console.log(response);
 
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log("from within111:", data);
 
     const voteElements = document.querySelectorAll(".cnUpVote");
     voteElements.forEach((voteElement, index) => {
