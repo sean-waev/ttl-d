@@ -434,7 +434,7 @@ async function main() {
 
     // Store the JSON string in local storage
     localStorage.setItem("SelectedItems", jsonArray);
-    const username1 = localStorage.getItem('username');
+    const username1 = localStorage.getItem('username-ai');
     localStorage.setItem("SelectedUser", username1);
     window.location.href = "./user_submissions.html";
   });
@@ -446,13 +446,13 @@ async function main() {
 
     // Store the JSON string in local storage
     localStorage.setItem("SelectedComments", jsonArray);
-    const username1 = localStorage.getItem('username');
+    const username1 = localStorage.getItem('username-ai');
     localStorage.setItem("SelectedUser", username1);
     window.location.href = "./user_comments.html";
   });
   votes.addEventListener("click", () => {
     localStorage.setItem("SelectedItems", users.upvotedSubmissions);
-    const username1 = localStorage.getItem('username');
+    const username1 = localStorage.getItem('username-ai');
     localStorage.setItem("SelectedUser", username1);
     const myArray = users.upvotedSubmissions;
 
