@@ -145,7 +145,44 @@ async function main() {
 
     return domainCom;
   }
-
+  async function deleteItem(id) {
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/items/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+  
+      console.log(response);
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
 
@@ -176,7 +213,7 @@ async function main() {
   // const response = await fetch("https://example.org/products.json").json();
 
   // ex = getData();
-
+  const currentUserMap = localStorage.getItem("username");
   const mappedUsers = users
     .map((user, index) => {
       if (user) {
@@ -215,7 +252,13 @@ font-size: 10px;">
     )}</a></span> <span id="unv_40832214"></span> 
     | <a class="cnComment" id="${user._id}*">${
           user.comments?.length | 0
-        }&nbsp;comments</a>
+        }&nbsp;comments </a><a  class="flag" id="${user._id}[" style="visibility: ${
+          currentUserMap
+            ? currentUserMap === "null"
+              ? "hidden"
+              : "visible"
+            : "hidden"
+        }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a>
     <a style="visibility: hidden;" id="${user._id}$" class="cnDownVote"> 
      | unvote
    </a>
@@ -233,6 +276,22 @@ font-size: 10px;">
 
   document.getElementById("container").innerHTML = mappedUsers;
   //---------------------------------------------------------------------------------------------------------
+  
+  const flags = document.querySelectorAll(".flag");
+
+  flags.forEach((element) => {
+    element.addEventListener("click", () => {
+      if (element.textContent === "| delete?") {
+        element.textContent = "| deleted";
+      } else {
+        element.textContent = "| flagged";
+      }
+      const itemId = element.id.replace("[", "");
+      deleteItem(itemId);
+    });
+  });
+  
+  
   // Add click listeners to .cnUser elements
   const elements = document.querySelectorAll(".cnUser");
   elements.forEach((element) => {
