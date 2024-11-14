@@ -8,7 +8,7 @@ async function fetchData() {
   const title = document.getElementById("title").value;
   const url = document.getElementById("url").value;
   const body = document.getElementById("body").value;
-  const username = localStorage.getItem('username');
+  const username = localStorage.getItem('username-ai');
 
   console.log("title:", title);
   console.log("url:", url);
