@@ -20,7 +20,6 @@ async function fetchData() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -50,7 +49,6 @@ async function UpVote(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -64,7 +62,6 @@ async function UpVote(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -94,7 +91,6 @@ async function DownVote(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -108,7 +104,6 @@ async function DownVote(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -138,7 +133,6 @@ async function UpVoteComment(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -152,7 +146,6 @@ async function UpVoteComment(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -182,7 +175,6 @@ async function DownVoteComment(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -196,7 +188,6 @@ async function DownVoteComment(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -234,7 +225,6 @@ function timeSince(date) {
 // An async function to access data outside fetchData
 async function main() {
   const Item = await fetchData();
-  console.log("From outside:", Item); // Here data can be used as a constant
 
   function stripToDomain(url) {
     const urlObj = new URL(url);
@@ -248,6 +238,44 @@ async function main() {
     const domainCom = parts.slice(-2).join(".");
 
     return domainCom;
+  }
+
+  async function deleteComment(id) {
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          window.location.href = "./cn_comments.html";
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+  
+      console.log(response);
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   }
 
   function timeSince(date) {
@@ -280,6 +308,7 @@ async function main() {
   // const response = await fetch("https://example.org/products.json").json();
 
   // ex = getData();
+  const currentUserMap = localStorage.getItem("username");
 
   const ItemDisplay = `<tr class="athing" id="41790045">
         
@@ -310,7 +339,13 @@ async function main() {
                               <span id="unv_41790045" style="pointer-events: none;
   cursor: default;"></span><span ><a class="cnContext" id="${
     Item?.item
-  }%"> | context</a></span> 
+  }%"> | context </a><a  class="flag" id="${Item._id}[" style="visibility: ${
+          currentUserMap
+            ? currentUserMap === "null"
+              ? "hidden"
+              : "visible"
+            : "hidden"
+        }">| ${Item.author === currentUserMap ? "delete?" : "flag?"}</a></span> 
                                <a style="visibility: hidden;" id="${
                                  Item._id
                                }$" class="cnCommentDownVote"> 
@@ -331,14 +366,27 @@ async function main() {
                   `;
 
   document.getElementById("container111").innerHTML = ItemDisplay;
+    // Add click listeners to .cnUser elements
+    const flags = document.querySelectorAll(".flag");
 
+    flags.forEach((element) => {
+      element.addEventListener("click", () => {
+        if (element.textContent === "| delete?") {
+          element.textContent = "| deleted";
+        } else {
+          element.textContent = "| flagged";
+        }
+        const itemId = element.id.replace("[", "");
+        deleteComment(itemId);
+      });
+    });
   //---------------------------------------------------------------------------------------------------------
 
   // // Add click listeners to .cnUser elements
   // const elements = document.querySelectorAll(".cnUser");
   // elements.forEach((element) => {
   //   element.addEventListener("click", () => {
-  //     console.log(element.textContent);
+  //     (element.textContent);
   //     localStorage.setItem("SelectedUser", element.textContent);
   //     window.location.href = "./user_individual.html";
   //   });
@@ -365,8 +413,7 @@ async function main() {
         window.location.href = "./login.html";
       }
 
-      console.log(voteElement.id);
-      console.log(index);
+
 
       voteElement.style.visibility = "hidden";
       UpVote(voteElement.id);
@@ -380,9 +427,7 @@ async function main() {
 
   unvoteElements.forEach((unvoteElement, index) => {
     unvoteElement.addEventListener("click", () => {
-      console.log(unvoteElement.id);
       const itemId = unvoteElement.id.replace("$", "");
-      console.log(itemId);
 
       unvoteElement.style.visibility = "hidden";
 
@@ -399,7 +444,6 @@ async function main() {
   const elements = document.querySelectorAll(".cnUser");
   elements.forEach((element) => {
     element.addEventListener("click", () => {
-      console.log(element.textContent);
       localStorage.setItem("SelectedUser", element.textContent);
       window.location.href = "./user_individual.html";
     });
@@ -413,8 +457,6 @@ async function main() {
         window.location.href = "./login.html";
       }
 
-      console.log(commentUpVoteElement.id);
-      console.log(index);
 
       commentUpVoteElement.style.visibility = "hidden";
       UpVoteComment(commentUpVoteElement.id);
@@ -428,9 +470,7 @@ async function main() {
 
   commentUnVoteElements.forEach((commentUnVoteElement, index) => {
     commentUnVoteElement.addEventListener("click", () => {
-      console.log(commentUnVoteElement.id);
       const itemId = commentUnVoteElement.id.replace("$", "");
-      console.log(itemId);
 
       commentUnVoteElement.style.visibility = "hidden";
 
@@ -474,7 +514,6 @@ async function postReply() {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
         // window.location.href = "./news_individual.html";
       })
       .catch((error) => {
@@ -489,7 +528,6 @@ async function postReply() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -508,7 +546,6 @@ async function submitReply() {
    
     const ItemId = document.querySelector(".cnContext").id;
 
-    console.log("ItemIddddd", ItemId);
 
     window.location.href = "./news_individual.html";
   }
@@ -518,7 +555,6 @@ main(); // Call main to execute and retrieve the data
 
 async function fetchCurrentUser1() {
   const username = localStorage.getItem("username");
-  console.log("iran");
   const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/users/findProtected/${username}`;
   try {
     const response = await fetch(USER_URL, {
@@ -536,7 +572,6 @@ async function fetchCurrentUser1() {
     }
 
     const data = await response.json();
-    console.log("from within111:", data);
 
     const voteElements = document.querySelectorAll(".cnUpVote");
     voteElements.forEach((voteElement, index) => {
