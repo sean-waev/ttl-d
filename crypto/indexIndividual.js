@@ -23,7 +23,6 @@ async function fetchData() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -33,7 +32,6 @@ async function fetchData() {
 // An async function to access data outside fetchData
 async function main() {
   const users = await fetchData();
-  console.log("From outside:", users); // Here data can be used as a constant
 
   function stripToDomain(url) {
     const urlObj = new URL(url);
@@ -126,16 +124,7 @@ async function main() {
                                     ).toLocaleDateString()}</td>
                                   
                                 </tr>
-                                                                <br>
-                                                                <br>
-
-                                <tr>
-                                    <td valign="top">karma: ${
-                                      users.points || 0
-                                    }</td>
-                           
-                                     
-                                </tr>
+                               
                                 <br>
                                 <br>
                                 <tr>
@@ -148,9 +137,9 @@ async function main() {
                               </tr>
                               <br>
                               <br>
-                              <tr><td></td><td><a style="margin-bottom: 5px;" id="submissions"><u>submissions</u></a></td></tr>
-                              <tr><td></td><td><a style="margin-bottom: 5px;" id="userComments"><u>comments</u></a></td></tr>
-                              <tr><td></td><td><a style="margin-bottom: 5px;"id="votes"><u>votes</u></a></td></tr>
+                              <tr><td></td><td><a style="margin-bottom: 5px; cursor: pointer;" id="submissions"><u>submissions</u></a></td></tr>
+                              <tr><td></td><td><a style="margin-bottom: 5px;cursor: pointer;" id="userComments"><u>comments</u></a></td></tr>
+                              <tr><td></td><td><a style="margin-bottom: 5px;cursor: pointer;"id="votes"><u>votes</u></a></td></tr>
                   `;
 
   document.getElementById("container").innerHTML = mappedUsers;
@@ -161,7 +150,6 @@ async function main() {
 
   submissions.addEventListener("click", () => {
     const myArray = users.submissions;
-    console.log("myArray:", myArray);
 
     // Convert the array to a JSON string
     const jsonArray = JSON.stringify(myArray);
@@ -172,7 +160,6 @@ async function main() {
   });
   userComments.addEventListener("click", () => {
     const myArray = users.comments;
-    console.log("myArray:", myArray);
 
     // Convert the array to a JSON string
     const jsonArray = JSON.stringify(myArray);
@@ -184,7 +171,6 @@ async function main() {
   votes.addEventListener("click", () => {
     localStorage.setItem("SelectedItems", users.upvotedSubmissions);
     const myArray = users.upvotedSubmissions;
-    console.log("myArray:", myArray);
 
     // Convert the array to a JSON string
     const jsonArray = JSON.stringify(myArray);
