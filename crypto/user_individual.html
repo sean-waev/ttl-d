@@ -33,10 +33,10 @@
                                         </span></td>
                                     <td style="text-align:right;padding-right:4px;"><span class="pagetop"
                                             style="color: white;display: -webkit-inline-box;">
-                                            <div id="log">
+                                            <div id="log" style="cursor: pointer;">
 
                                             </div>
-                                            <a style="padding-left:5px; color: white;" id="loginButton"
+                                            <a style="padding-left:5px; color: white;cursor: pointer;" id="loginButton"
                                                 onclick="clickLog()"></a>
                                             <!-- <a style="color: white;" id="me" href="./profile.html">seanmcd311</a> (<span
                                                     style="color: white;" id="karma">1</span>) | <a id="logout"
@@ -81,36 +81,7 @@
     <script type="text/javascript" src="hn.js?sdVFsU7UVqtyRdyGfGXh"></script>
 
 </body>
-<script>
-    const username = localStorage.getItem("username");
-    console.log(username);
-    let header = username === "null" ? "" : `${username} |`
-    let button = username === "null" ? "login" : "Logout";
-    console.log("header:", header);
-    document.getElementById("log").innerText = header;
-    document.getElementById("loginButton").innerText = button;
-
-    function clickLog() {
-
-        if (username !== "null") {
-            localStorage.setItem("username", null);
-            localStorage.setItem("accesstoken", null);
-            window.location.href = "./index.html";
-        } else {
-            window.location.href = "./login.html";
-        }
-    }
-
-    function clickSubmit() {
-
-        if (username !== "null") {
-            window.location.href = "./submit.html";
-        } else {
-            window.location.href = "./login.html";
-        }
-    }
-
-
+<script src="header.js">
 </script>
 <script src="indexIndividual.js"></script>
 
