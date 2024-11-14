@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "6703cd228c976fc59ed362a9",
+    "name": "Item 6",
+    "quantity": 5,
+    "description": "this is item 5",
+    "__v": 0
+  },
+  {
+    "_id": "6703cd6b8c976fc59ed362ac",
+    "name": "Item 3",
+    "quantity": 5,
+    "description": "this is item 3",
+    "__v": 0
+  }
+]
