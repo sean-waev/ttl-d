@@ -2,18 +2,20 @@
 
 // Replace with your actual Heroku API endpoint
 const API_URL =
-  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/jobs/jobs/newest";
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/jobs/jobs/newest/pages";
 
 // Example function to get data from your API
-async function fetchData() {
+async function fetchData(pageNum) {
   try {
     const response = await fetch(API_URL, {
-      // mode: 'no-cors',
-      method: "GET", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+      method: "PUT", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
       headers: {
         "Content-Type": "application/json",
         // Add any required headers, like authorization, here if needed
       },
+      body: JSON.stringify({
+        pageNumber: pageNum || 0,
+      }),
     });
 
     console.log(response);
@@ -23,7 +25,6 @@ async function fetchData() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -32,21 +33,42 @@ async function fetchData() {
 }
 // An async function to access data outside fetchData
 async function main() {
-  const users = await fetchData();
-  console.log("From outside:", users); // Here data can be used as a constant
+  // localStorage.setItem("pageNumberAsk", 0);
+  const pageNumberInput = localStorage.getItem("pageNumberJobs");
+
+  const numberInput = parseInt(pageNumberInput) || 0;
+
+
+  const users = await fetchData(numberInput);
+
+  if (users.length < 30) {
+    //hide more
+
+    const moreButton = document.getElementById("next-page-jobs");
+    moreButton.style.display = "none";
+  }
+
+  if (numberInput === 0) {
+    //hide back
+    const moreButton = document.getElementById("back-page-jobs");
+    moreButton.style.display = "none";
+  }
 
   function stripToDomain(url) {
-    const urlObj = new URL(url);
-    const hostname = urlObj.hostname;
+    if (url.includes("www.")) {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname;
 
-    // Remove 'www.' if present
-    const domain = hostname.replace(/^www\./, "");
+      // Remove 'www.' if present
+      const domain = hostname.replace(/^www\./, "");
 
-    // Split by '.' and get the last two parts
-    const parts = domain.split(".");
-    const domainCom = parts.slice(-2).join(".");
+      // Split by '.' and get the last two parts
+      const parts = domain.split(".");
+      const domainCom = parts.slice(-2).join(".");
 
-    return domainCom;
+      return domainCom;
+    }
+    return "";
   }
 
   function vote(id) {
@@ -103,25 +125,65 @@ async function main() {
     }
     return Math.floor(seconds) + " seconds ago";
   }
+  async function deleteJob(id) {
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/jobs/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
 
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
   // const response = await fetch("https://example.org/products.json").json();
 
   // ex = getData();
-
+  const currentUserMap = localStorage.getItem("username");
   const mappedUsers = users
     .map((user, index) => {
       return `<tr class="athing" >
                                   <td align="right" valign="top" class="title"></td>
                                  
                                   <td class="title"><span style="color: black;display: flex; gap:5px;" class="titleline" ><span style="color: black;" class="rank">${
-                                    index + 1
+                                    index + 1 + numberInput * 30
                                   }.</span><span style='font-size:11px; color: black; margin-right:11px;'></span><a style="color: black;"
                                               href="${user.url}">${
         user.title
       }</a> <span
-                                              class="sitebit comhead"> ${
-                                                user.url ? "(" : ""
-                                              }<a style="color: black;"
+                                             class="sitebit comhead"> ${
+                                               user.url
+                                                 ? stripToDomain(user.url) ===
+                                                   ""
+                                                   ? ""
+                                                   : "("
+                                                 : ""
+                                             }<a style="color: black;"
                                                   href="${
                                                     user.url
                                                   }"><span style="color: black;"
@@ -132,7 +194,7 @@ async function main() {
                                                             )
                                                           : ""
                                                       }</span></a>${
-        user.url ? ")" : ""
+        user.url ? (stripToDomain(user.url) === "" ? "" : ")") : ""
       }</span></span>
                                   </td>
                   </tr>
@@ -142,19 +204,80 @@ async function main() {
                       <td class="subtext"><span class="subline" style="margin-left: 35px;
       font-size: 10px;">
                             
-                              <span class="age" title="2024-06-29T17:39:16"><a >${timeSince(
-                                new Date(user.createdAt)
-                              )}</a></span> <span id="unv_40832214"></span> 
+                              <span  title="2024-06-29T17:39:16"  ><a class="age" id="${
+                                user._id
+                              }#">${timeSince(
+        new Date(user.createdAt)
+      )}</a>   <a  class="flag" style="cursor: pointer;" id="${user._id}[" style="visibility: ${
+        currentUserMap
+          ? currentUserMap === "null"
+            ? "hidden"
+            : "visible"
+          : "hidden"
+      }">| ${
+        user.author === currentUserMap ? "delete?" : "flag?"
+      }</a></span> <span id="unv_40832214"></span> 
                           </span>
                       </td>
                   </tr>
                   <br>
                   <div style="height: 8px;"></div>
+                  
                   `;
     })
     .join("");
 
   document.getElementById("container").innerHTML = mappedUsers;
+
+  // Add click listeners to .cnUser elements
+  const flags = document.querySelectorAll(".flag");
+
+  flags.forEach((element) => {
+    element.addEventListener("click", () => {
+      if (element.textContent === "| delete?") {
+        element.textContent = "| deleted";
+      } else {
+        element.textContent = "| flagged";
+      }
+      const itemId = element.id.replace("[", "");
+      deleteJob(itemId);
+    });
+  });
+
+  // Add click listeners to .cnUser elements
+  const age = document.querySelectorAll(".age");
+
+  age.forEach((element) => {
+    element.addEventListener("click", () => {
+      const itemId = element.id.replace("#", "");
+
+      localStorage.setItem("SelectedJob", itemId);
+
+      window.location.href = "./jobs_individual.html";
+    });
+  });
+
+  // Add event listener for the change email button
+  const addNEXTButtonEvent = document.getElementById("next-page-jobs");
+  addNEXTButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberJobs");
+
+    const num = parseInt(page) === NaN ? 0 : parseInt(page);
+
+    localStorage.setItem("pageNumberJobs", num ? num + 1 : 1);
+    window.location.href = "./cn_jobs.html";
+  });
+
+  // Add event listener for the change email button
+  const addbackButtonEvent = document.getElementById("back-page-jobs");
+  addbackButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberJobs");
+
+    const num = parseInt(page);
+
+    localStorage.setItem("pageNumberJobs", num - 1);
+    window.location.href = "./cn_jobs.html";
+  });
 }
 
 main(); // Call main to execute and retrieve the data
@@ -165,12 +288,10 @@ main(); // Call main to execute and retrieve the data
 //       "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items",
 //       { mode: "no-cors" }
 //     );
-//     console.log("response", response);
 //     if (!response.ok) {
 //       throw new Error("Network response was not ok");
 //     }
 //     const data = await response.json();
-//     console.log("datat from within:", data);
 //     return data;
 //   } catch (error) {
 //     console.error("Error fetching data:", error);
@@ -178,14 +299,12 @@ main(); // Call main to execute and retrieve the data
 //   }
 // }
 
-// const res = console.log("FRES", res);
 
 // // Using the function
 // async function main() {
 //   try {
 //     const result = await fetchData();
 //     return result;
-//     console.log(result); // Use the fetched data
 //   } catch (error) {
 //     console.error("Error in main:", error);
 //   }
@@ -193,7 +312,6 @@ main(); // Call main to execute and retrieve the data
 
 // data = main();
 
-// console.log("data:", data);
 
 // const users = [
 //   {
