@@ -259,6 +259,83 @@ async function main() {
     }
     return Math.floor(seconds) + " seconds ago";
   }
+  async function deleteComment(id) {
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+  async function deleteReply(id) {
+    const UPVOTE_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/${id}`;
+    try {
+      const response = await fetch(UPVOTE_URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the API response data
+          console.log(data);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error:", error);
+        });
+  
+      console.log(response);
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log("from within:", data);
+      return data;
+      // Use this data as needed in your frontend
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+  const currentUserMap = localStorage.getItem("username");
   async function fetchReplies(itemReplies, index1) {
     console.log("iran1");
     const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/replies/findbyIds`;
@@ -311,7 +388,15 @@ async function main() {
                                   | ${timeSince(
                                     new Date(data?.createdAt)
                                   )}</a></span> <span style="pointer-events: none;
-      cursor: default;"> | ${data.points} points</span> 
+      cursor: default;"> | ${data.points} points</span> <a  class="replyFlags" id="${
+        data._id
+      }[" style="visibility: ${
+              currentUserMap
+                ? currentUserMap === "null"
+                  ? "hidden"
+                  : "visible"
+                : "hidden"
+            }">| ${data.author === currentUserMap ? "delete?" : "flag?"}</a>
                                   <span id="unv_41790045" style="pointer-events: none;
       cursor: default;"></span> 
                                    <a style="visibility: hidden;" id="${
@@ -344,6 +429,20 @@ async function main() {
       const ReplyVoteElements = document.querySelectorAll(".cnReplyUpVote");
 
       await fetchCurrentUser1();
+
+      const replyFlags = document.querySelectorAll(".replyFlags");
+
+      replyFlags.forEach((element) => {
+        element.addEventListener("click", () => {
+          if (element.textContent === "delete?") {
+            element.textContent = "deleted";
+          } else {
+            element.textContent = "flagged";
+          }
+          const itemId = element.id.replace("[", "");
+          deleteReply(itemId);
+        });
+      });
 
       ReplyVoteElements.forEach((voteElement, index) => {
         voteElement.addEventListener("click", () => {
@@ -401,6 +500,7 @@ async function main() {
 
   // ex = getData();
 
+
   const mappedUsers = users
     .map((user, index) => {
       if (user?.replies.length > 0) {
@@ -435,7 +535,15 @@ async function main() {
                               <span id="unv_41790045"></span> 
                               <span ><a class="cnContext" id="${
                                 user?.item
-                              }%"> | context</a></span> 
+                              }%"> | context </a><a  class="flag" id="${
+          user._id
+        }[" style="visibility: ${
+          currentUserMap
+            ? currentUserMap === "null"
+              ? "hidden"
+              : "visible"
+            : "hidden"
+        }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a></span> 
                               <span id="unv_41790045"></span> 
                                <a style="visibility: hidden;" id="${
                                  user._id
@@ -477,7 +585,21 @@ async function main() {
       window.location.href = "./user_individual.html";
     });
   });
+  // Add click listeners to .cnUser elements
+  const flags = document.querySelectorAll(".flag");
 
+  flags.forEach((element) => {
+    element.addEventListener("click", () => {
+      console.log("element.textContent:", element.textContent);
+      if (element.textContent === " | delete? ") {
+        element.textContent = "| deleted";
+      } else {
+        element.textContent = "| flagged";
+      }
+      const itemId = element.id.replace("[", "");
+      deleteComment(itemId);
+    });
+  });
   const commentUpVoteElements = document.querySelectorAll(".cnCommentUpVote");
 
   commentUpVoteElements.forEach((commentUpVoteElement, index) => {
