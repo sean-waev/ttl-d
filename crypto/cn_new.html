@@ -34,10 +34,10 @@
                                             </span></td>
                                         <td style="text-align:right;padding-right:4px;"><span class="pagetop"
                                                 style="color: white; display: -webkit-inline-box;">
-                                                <div id="log">
-    
+                                                <div id="log" style="cursor: pointer;">
+
                                                 </div>
-                                                <a style="padding-left:5px; color: white;" id="loginButton"
+                                                <a style="padding-left:5px; color: white;cursor: pointer;" id="loginButton"
                                                     onclick="clickLog()"></a>
                                                 <!-- username ? `${username} |` : "login" -->
                                                 <!-- <a style="color: white;" id="me" href="./profile.html">seanmcd311</a> (<span
@@ -62,7 +62,13 @@
                         <div id="pagination-controls" style="padding-top: 10px;padding-left: 20px; color: black">
                             <!-- <button id="prev-page" onclick="changePage(currentPage - 1)">Previous</button> -->
         
-                            <div id="next-page" onclick="changePage(currentPage + 1)" style="visibility: hidden;">More</div>
+                            <div style="display: flex; flex-direction: row;">
+                                <div id="back-page" style="color: #828282;margin: 10px; margin-top: 0px;">Back
+                                </div>
+                                <div id="next-page" style="color: #828282; margin: 10px;margin-top: 0px;">More
+                                </div>
+                                
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -89,36 +95,7 @@
     <script type="text/javascript" src="./Hacker News_files/hn.js"></script>
 
 </body>
-<script>
-    const username = localStorage.getItem("username");
-    console.log(username);
-    let header = username === "null"? "" : `${username} |`
-    let button = username === "null"? "login" : "Logout";
-    console.log("header:", header);
-    document.getElementById("log").innerText = header;
-    document.getElementById("loginButton").innerText = button;
-
-    function clickLog() {
-
-        if (username !== "null") {
-            localStorage.setItem("username", null);
-            localStorage.setItem("accesstoken", null);
-            window.location.href = "./index.html";
-        }else{
-            window.location.href = "./login.html";
-        }
-    }
-
-    function clickSubmit() {
-
-if (username !== "null") {
-    window.location.href = "./submit.html";
-}else{
-    window.location.href = "./login.html";
-}
-}
-
-
+<script src="header.js">
 </script>
 <script src="indexNew.js"></script>
 
