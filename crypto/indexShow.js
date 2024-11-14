@@ -1,16 +1,21 @@
 // const userss = fetch(items/main);
 
 // Replace with your actual Heroku API endpoint
-const API_URL = "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items/show";
+const API_URL =
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items/show/pages";
+
 // Example function to get data from your API
-async function fetchData() {
+async function fetchData(pageNum) {
   try {
     const response = await fetch(API_URL, {
-      method: "GET", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+      method: "PUT", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
       headers: {
         "Content-Type": "application/json",
         // Add any required headers, like authorization, here if needed
       },
+      body: JSON.stringify({
+        pageNumber: pageNum || 0,
+      }),
     });
 
     console.log(response);
@@ -157,21 +162,46 @@ async function DownVote(id) {
 
 // An async function to access data outside fetchData
 async function main() {
-  const users = await fetchData();
+  // localStorage.setItem("pageNumberAsk", 0);
+  const pageNumberInput = localStorage.getItem("pageNumberShow");
+
+  const numberInput = parseInt(pageNumberInput) || 0;
+
+  console.log("numberInput", numberInput);
+
+  const users = await fetchData(numberInput);
+
+  if (users.length < 30) {
+    //hide more
+
+    const moreButton = document.getElementById("next-page-show");
+    moreButton.style.display = "none";
+  }
+
+  if (numberInput === 0) {
+    //hide back
+    const moreButton = document.getElementById("back-page-show");
+    moreButton.style.display = "none";
+  }
   console.log("From outside:", users); // Here data can be used as a constant
 
   function stripToDomain(url) {
-    const urlObj = new URL(url);
-    const hostname = urlObj.hostname;
+    if (url.includes("www.")) {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname;
 
-    // Remove 'www.' if present
-    const domain = hostname.replace(/^www\./, "");
+      // Remove 'www.' if present
+      const domain = hostname.replace(/^www\./, "");
 
-    // Split by '.' and get the last two parts
-    const parts = domain.split(".");
-    const domainCom = parts.slice(-2).join(".");
+      // Split by '.' and get the last two parts
+      const parts = domain.split(".");
+      const domainCom = parts.slice(-2).join(".");
+      console.log("wediddit");
+      console.log(domainCom);
 
-    return domainCom;
+      return domainCom;
+    }
+    return "";
   }
 
   function timeSince(date) {
@@ -221,8 +251,8 @@ async function main() {
                                   
                                  
                                   <td class="title"><span style="color: black; display:flex; gap:5px;" class="titleline" ><span style="color: black;min-width: 23px;" class="rank">${
-                                    index + 1
-                                  }.</span><span style='font-size:11px; color: black;'><img id="${
+                                    index + 1 + numberInput * 30
+                                  }.</span><span style='font-size:11px; color: black;'><img style="cursor: pointer;" id="${
           user._id
         }" class="cnUpVote"
                                                       src="./Hacker News_files/tpp.png" height="18"
@@ -230,9 +260,14 @@ async function main() {
                                               href="${user.url}">${
           user.title
         }</a> <span
-                                              class="sitebit comhead"> ${
-                                                user.url ? "(" : ""
-                                              }<a style="color: black;"
+                                            class="sitebit comhead"> ${
+                                               user.url
+                                                 ? stripToDomain(user.url) ===
+                                                   ""
+                                                   ? ""
+                                                   : "("
+                                                 : ""
+                                             }<a style="color: black;"
                                                   href="${
                                                     user.url
                                                   }"><span style="color: black;"
@@ -243,7 +278,7 @@ async function main() {
                                                             )
                                                           : ""
                                                       }</span></a>${
-          user.url ? ")" : ""
+          user.url ? (stripToDomain(user.url) === "" ? "" : ")") : ""
         }</span></span>
                                   </td>
                   </tr>
@@ -255,22 +290,22 @@ async function main() {
                               <span class="score" id="score_40832214">${
                                 user.points
                               } points</span> | by <a id="user${index}"
-                                  class="cnUser" >${user.author}</a>
+                                  class="cnUser"style="cursor: pointer;">${user.author}</a>
                               <span class="age" title="2024-06-29T17:39:16"><a >| ${timeSince(
                                 new Date(user.createdAt)
                               )}</a></span> <span id="unv_40832214"></span> 
-                              | <a class="cnComment" id="${user._id}*">${
+                              | <a class="cnComment" style="cursor: pointer;"id="${user._id}*">${
           user.comments?.length | 0
         }&nbsp;comments</a> 
         
-         <a  class="flag" id="${user._id}[" style="visibility: ${
+         <a  class="flag"style="cursor: pointer;" id="${user._id}[" style="visibility: ${
           currentUserMap
             ? currentUserMap === "null"
               ? "hidden"
               : "visible"
             : "hidden"
         }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a>
-                              <a style="visibility: hidden;" id="${
+                              <a style="visibility: hidden;cursor: pointer;" id="${
                                 user._id
                               }$" class="cnDownVote"> 
                                | unvote
@@ -303,10 +338,10 @@ async function main() {
 
   flags.forEach((element) => {
     element.addEventListener("click", () => {
-      if (element.textContent === "delete?") {
-        element.textContent = "deleted";
+      if (element.textContent === "| delete?") {
+        element.textContent = "| deleted";
       } else {
-        element.textContent = "flagged";
+        element.textContent = "| flagged";
       }
       const itemId = element.id.replace("[", "");
       deleteItem(itemId);
@@ -362,7 +397,27 @@ async function main() {
       window.location.href = "./news_individual.html";
     });
   });
+  // Add event listener for the change email button
+  const addNEXTButtonEvent = document.getElementById("next-page-show");
+  addNEXTButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberShow");
 
+    const num = parseInt(page) === NaN ? 0 : parseInt(page);
+
+    localStorage.setItem("pageNumberShow", num ? num + 1 : 1);
+    window.location.href = "./cn_show.html";
+  });
+
+  // Add event listener for the change email button
+  const addbackButtonEvent = document.getElementById("back-page-show");
+  addbackButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberShow");
+
+    const num = parseInt(page);
+
+    localStorage.setItem("pageNumberShow", num - 1);
+    window.location.href = "./cn_show.html";
+  });
   // // Add click listeners to .cnUser elements
   // const elements = document.querySelectorAll(".cnUser");
   // elements.forEach((element) => {
