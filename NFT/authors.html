@@ -1,0 +1,29 @@
+<h1>Authors</h1>
+<ul id="authors"></ul>
+<div id="data-container"></div>
+
+<script>
+
+
+  fetch('https://api.example.com/data', {
+    mode: 'no-cors'
+}) // Replace with your API URL
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json(); // Assuming the API returns JSON data
+  })
+  .then(data => {
+    // Process and display the data
+    const container = document.getElementById('data-container'); // Get a container element
+    data.forEach(item => {
+      const element = document.createElement('p');
+      element.textContent = `Item: ${item.name}`; // Display a property of the item
+      container.appendChild(element);
+    });
+  })
+  .catch(error => {
+    console.error('There was a problem fetching the data:', error);
+  });
+</script>
