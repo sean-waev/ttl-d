@@ -1,21 +1,22 @@
 // const userss = fetch(items/main);
-
+localStorage.removeItem("selectedItem");
 // Replace with your actual Heroku API endpoint
 const API_URL =
-  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/comments/newest";
+  "https://crypto-api-3-6bf97d4979d1.herokuapp.com/comments/comments/newest/pages";
 
 // Example function to get data from your API
-async function fetchData() {
+async function fetchData(pageNum) {
   try {
     const response = await fetch(API_URL, {
-      // mode: 'no-cors',
-      method: "GET", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+      method: "PUT", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
       headers: {
         "Content-Type": "application/json",
         // Add any required headers, like authorization, here if needed
       },
+      body: JSON.stringify({
+        pageNumber: pageNum || 0,
+      }),
     });
-
     console.log(response);
 
     if (!response.ok) {
@@ -23,7 +24,6 @@ async function fetchData() {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -48,7 +48,6 @@ async function deleteComment(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -62,7 +61,6 @@ async function deleteComment(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -86,7 +84,6 @@ async function deleteReply(id) {
       })
       .then((data) => {
         // Handle the API response data
-        console.log(data);
       })
       .catch((error) => {
         // Handle errors
@@ -100,7 +97,6 @@ async function deleteReply(id) {
     }
 
     const data = await response.json();
-    console.log("from within:", data);
     return data;
     // Use this data as needed in your frontend
   } catch (error) {
@@ -109,9 +105,27 @@ async function deleteReply(id) {
 }
 // An async function to access data outside fetchData
 async function main() {
-  const users = await fetchData();
+  // localStorage.setItem("pageNumberAsk", 0);
+  const pageNumberInput = localStorage.getItem("pageNumberComment");
 
-  console.log("From outside:", users); // Here data can be used as a constant
+  const numberInput = parseInt(pageNumberInput) || 0;
+
+
+  const users = await fetchData(numberInput);
+
+  if (users.length < 30) {
+    //hide more
+
+    const moreButton = document.getElementById("next-page-comment");
+    moreButton.style.display = "none";
+  }
+
+  if (numberInput === 0) {
+    //hide back
+    const moreButton = document.getElementById("back-page-comment");
+    moreButton.style.display = "none";
+  }
+
 
   function stripToDomain(url) {
     const urlObj = new URL(url);
@@ -149,7 +163,6 @@ async function main() {
         })
         .then((data) => {
           // Handle the API response data
-          console.log(data);
         })
         .catch((error) => {
           // Handle errors
@@ -163,7 +176,6 @@ async function main() {
       }
 
       const data = await response.json();
-      console.log("from within:", data);
       return data;
       // Use this data as needed in your frontend
     } catch (error) {
@@ -193,7 +205,6 @@ async function main() {
         })
         .then((data) => {
           // Handle the API response data
-          console.log(data);
         })
         .catch((error) => {
           // Handle errors
@@ -207,7 +218,6 @@ async function main() {
       }
 
       const data = await response.json();
-      console.log("from within:", data);
       return data;
       // Use this data as needed in your frontend
     } catch (error) {
@@ -236,7 +246,6 @@ async function main() {
         })
         .then((data) => {
           // Handle the API response data
-          console.log(data);
         })
         .catch((error) => {
           // Handle errors
@@ -250,7 +259,6 @@ async function main() {
       }
 
       const data = await response.json();
-      console.log("from within:", data);
       return data;
       // Use this data as needed in your frontend
     } catch (error) {
@@ -280,7 +288,6 @@ async function main() {
         })
         .then((data) => {
           // Handle the API response data
-          console.log(data);
         })
         .catch((error) => {
           // Handle errors
@@ -294,7 +301,6 @@ async function main() {
       }
 
       const data = await response.json();
-      console.log("from within:", data);
       return data;
       // Use this data as needed in your frontend
     } catch (error) {
@@ -328,92 +334,92 @@ async function main() {
     return Math.floor(seconds) + " seconds ago";
   }
   async function fetchReplies(itemReplies, index1) {
-    console.log("iran1");
     const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/replies/replies/findbyIds`;
     try {
       const response = await fetch(USER_URL, {
-        method: "POST", // or 'POST', 'PUT', 'DELETE', depending on the endpoint
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Add any required headers, like authorization, here if needed
         },
-        body: JSON.stringify({
-          replies: itemReplies,
-        }),
+        body: JSON.stringify({ replies: itemReplies }),
       });
-
-      console.log(response);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
       const datas = await response.json();
-      console.log("from within111:", datas);
       const currentUserMap = localStorage.getItem("username");
-      const mappedReplies = datas
-        .map((data, index) => {
-          if (data) {
-            return `<tr class="athing" id="41790045">
-            
-                 
-                
-              <div>
-                  <td class="default">
-                
-                      <div style=" margin-bottom:-10px;"><span class="comhead">
-                      <a id="up_41790045" style="
-      cursor: default;">
-                              <span
-                                  style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img id="${
-                                    data._id
-                                  }"
-                                  src="./Hacker News_files/tpp.png" height="18" class="cnReplyUpVote"
-                                  style="margin-right:8px;"></span>
-                          </a>
-                              <a class="cnUser">${
-                                data ? data?.author : ""
-                              }</a> <span class="age"
-                                  title="2024-10-09T16:55:00.000000Z"><a style="pointer-events: none;
-      cursor: default;">
-                                  | ${timeSince(
-                                    new Date(data?.createdAt)
-                                  )}</a></span> <span style="pointer-events: none;
-      cursor: default;"> | ${data.points} points</span> 
-                                  <span id="unv_41790045" style="pointer-events: none;
-      cursor: default;"></span>  <a  class="replyFlags" id="${
-        data._id
-      }[" style="visibility: ${
-              currentUserMap
-                ? currentUserMap === "null"
-                  ? "hidden"
-                  : "visible"
-                : "hidden"
-            }">| ${data.author === currentUserMap ? "delete?" : "flag?"}</a>
-                                   <a style="visibility: hidden;" id="${
-                                     data._id
-                                   }$" class="cnReplyDownVote"> 
+
+      // Helper function to recursively generate nested replies
+      const generateReplyHTML = (data, depth = 0) => {
+        const marginLeft = 10 + depth * 20; // Increase margin for nested levels
+        return `
+          <tr class="athing" id="${data._id}">
+            <div style="margin-left:${marginLeft}px;">
+              <td class="default">
+                <div style="margin-bottom:-10px;">
+                  <span class="comhead">
+                    <a id="up_${data._id}" style="cursor: default;">
+                      <span style='font-size:10px; margin-right: 4px; margin-left: 4px;'>
+                        <img style="cursor: pointer;" id="${
+                          data._id
+                        }" src="./Hacker News_files/tpp.png" height="18" class="cnReplyUpVote" style="margin-right:8px;">
+                      </span>
+                    </a>
+                    <a class="cnUser" style="cursor: pointer;">${data?.author || ""}</a>
+                    <span class="age" title="${data.createdAt}">
+                      <a style="pointer-events: none; cursor: default;">| ${timeSince(
+                        new Date(data.createdAt)
+                      )}</a>
+                    </span>
+                    <span style="pointer-events: none; cursor: default;">| ${
+                      data.points
+                    } points</span>
+                    <a class="replyFlags" style="cursor: pointer;"id="${
+                      data._id
+                    }[" style="visibility: ${
+          currentUserMap && currentUserMap !== "null" ? "visible" : "hidden"
+        }">| ${data.author === currentUserMap ? "delete?" : "flag?"}</a>
+        <a style="visibility: hidden;" id="${
+          data._id
+        }$" class="cnReplyDownVote"> 
                                    | unvote
                                  </a>
-                          </span></div><br>
-                      <div class="comment">
-                          <a>
-                              <div class="commtext c00" style="margin-left:40px;">${
-                                data?.reply
-                              }</div>
-                          </a>
-                          
-                      </div>
-                  </td>
-               </div>
-              </tr>
-    <div style="height: 8px;"></div>
-    `;
-          } else {
-            return "";
+                  </span>
+                </div><br>
+                <div class="comment">
+                  <div class="commtext c00" style="margin-left:40px;">${
+                    data.reply
+                  }</div>
+         <div  style="margin-left:40px;">        <p><font size="1">
+                      <u><a class="replyReply" id="${data._id}&" name="${
+          data.commentId
+        }"rel="nofollow" style="cursor: pointer;">reply</a></u>
+                  </font>
+      </p></div>
+                </div>
+              </td>
+            </div>
+          </tr>
+          <div style="height: 8px;"></div>
+          ${
+            data.replies
+              ? data.replies
+                  .map((nestedReply) =>
+                    generateReplyHTML(nestedReply, depth + 1)
+                  )
+                  .join("")
+              : ""
           }
-        })
+        `;
+      };
+
+      // Generate the HTML for each top-level reply with nested replies
+      const mappedReplies = datas
+        .map((data) => generateReplyHTML(data))
         .join("");
+
       if (document.getElementById(`replies${index1}`)) {
         document.getElementById(`replies${index1}`).innerHTML = mappedReplies;
       }
@@ -424,14 +430,11 @@ async function main() {
 
       ReplyVoteElements.forEach((voteElement, index) => {
         voteElement.addEventListener("click", () => {
-          console.log("im vlivk!!");
           const username = localStorage.getItem("username");
           if (!username || username === "null") {
             window.location.href = "./login.html";
           }
 
-          console.log(voteElement.id);
-          console.log(index);
 
           voteElement.style.visibility = "hidden";
           UpVoteReply(voteElement.id);
@@ -440,11 +443,23 @@ async function main() {
           unvoteE.style.visibility = "visible";
         });
       });
+      //reples of preles
+      const repls = document.querySelectorAll(".replyReply");
+      repls.forEach((element) => {
+        element.addEventListener("click", () => {
+          const replyId = element.id.replace("&", "");
+          const commentId = element.name;
+          localStorage.setItem("selectedCommentIn", commentId);
+          localStorage.setItem("selectedReplyIn", replyId);
+          window.location.href = "./reply_individual.html";
+        });
+      });
+
       const replyFlags = document.querySelectorAll(".replyFlags");
 
       replyFlags.forEach((element) => {
         element.addEventListener("click", () => {
-          if (element.textContent === "delete?") {
+          if (element.textContent === "| delete?") {
             element.textContent = "deleted";
           } else {
             element.textContent = "flagged";
@@ -457,9 +472,7 @@ async function main() {
 
       ReplyUnVoteElements.forEach((unvoteElement, index) => {
         unvoteElement.addEventListener("click", () => {
-          console.log(unvoteElement.id);
           const itemId = unvoteElement.id.replace("$", "");
-          console.log(itemId);
 
           unvoteElement.style.visibility = "hidden";
 
@@ -474,7 +487,6 @@ async function main() {
         const elements = document.querySelectorAll(".cnUser");
         elements.forEach((element) => {
           element.addEventListener("click", () => {
-            console.log(element.textContent);
             localStorage.setItem("SelectedUser", element.textContent);
             window.location.href = "./user_individual.html";
           });
@@ -506,13 +518,13 @@ async function main() {
                   <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
                   <a id="up_41790045" class="clicky">
                           <span
-                              style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img id="${
+                              style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img style="cursor: pointer;" id="${
                                 user._id
                               }"
                               src="./Hacker News_files/tpp.png" height="18" class="cnCommentUpVote"
                               style="margin-right:8px;"></span>
                       </a>
-                          <a id="user${index}" class="cnUser">${
+                          <a id="user${index}" class="cnUser" style="cursor: pointer;">${
         user ? user?.author : ""
       }</a> <span class="age"
                               title="2024-10-09T16:55:00.000000Z" style="pointer-events: none;
@@ -522,11 +534,11 @@ async function main() {
                               )}</a></span> <span style="pointer-events: none;
   cursor: default;"> | ${user.points} points</span> 
                               <span id="unv_41790045"></span> 
-                              <span ><a class="cnContext" id="${
+                              <span ><a class="cnContext"  style="cursor: pointer;" id="${
                                 user?.item
                               }%"> | context</a></span> 
                               <span id="unv_41790045"></span> 
-                               <a  class="flags" id="${
+                               <a  class="flags" style="cursor: pointer;" id="${
                                  user._id
                                }[" style="visibility: ${
         currentUserMap
@@ -535,9 +547,9 @@ async function main() {
             : "visible"
           : "hidden"
       }">| ${user.author === currentUserMap ? "delete?" : "flag?"}</a>
-                               <a style="visibility: hidden;" id="${
+                               <a style="visibility: hidden;cursor: pointer;" id="${
                                  user._id
-                               }$" class="cnCommentDownVote"> 
+                               }$" class="cnCommentDownVote" > 
                                | unvote
                              </a>
                       </span></div><br>
@@ -550,7 +562,7 @@ async function main() {
                       <div  style="margin-left:40px;">        <p><font size="1">
                       <u><a class="reply" id="${
                         user._id
-                      }&"rel="nofollow">reply</a></u>
+                      }&"rel="nofollow" style="cursor: pointer;">reply</a></u>
                   </font>
       </p></div>
                   </div>
@@ -569,7 +581,6 @@ async function main() {
   const elements = document.querySelectorAll(".cnUser");
   elements.forEach((element) => {
     element.addEventListener("click", () => {
-      console.log(element.textContent);
       localStorage.setItem("SelectedUser", element.textContent);
       window.location.href = "./user_individual.html";
     });
@@ -578,10 +589,10 @@ async function main() {
 
   flags.forEach((element) => {
     element.addEventListener("click", () => {
-      if (element.textContent === "delete?") {
-        element.textContent = "deleted";
+      if (element.textContent === "| delete?") {
+        element.textContent = "| deleted";
       } else {
-        element.textContent = "flagged";
+        element.textContent = "| flagged";
       }
       const itemId = element.id.replace("[", "");
       deleteComment(itemId);
@@ -596,8 +607,7 @@ async function main() {
         window.location.href = "./login.html";
       }
 
-      console.log(commentUpVoteElement.id);
-      console.log(index);
+  
 
       commentUpVoteElement.style.visibility = "hidden";
       UpVoteComment(commentUpVoteElement.id);
@@ -611,9 +621,7 @@ async function main() {
 
   commentUnVoteElements.forEach((commentUnVoteElement, index) => {
     commentUnVoteElement.addEventListener("click", () => {
-      console.log(commentUnVoteElement.id);
       const itemId = commentUnVoteElement.id.replace("$", "");
-      console.log(itemId);
 
       commentUnVoteElement.style.visibility = "hidden";
 
@@ -627,7 +635,6 @@ async function main() {
   const repls = document.querySelectorAll(".reply");
   repls.forEach((element) => {
     element.addEventListener("click", () => {
-      console.log(element.textContent);
       const commentId = element.id.replace("&", "");
       localStorage.setItem("selectedCommentIn", commentId);
       window.location.href = "./comment_individual.html";
@@ -644,13 +651,34 @@ async function main() {
       window.location.href = "./news_individual.html";
     });
   });
+
+  // Add event listener for the change email button
+  const addNEXTButtonEvent = document.getElementById("next-page-comment");
+  addNEXTButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberComment");
+
+    const num = parseInt(page) === NaN ? 0 : parseInt(page);
+
+    localStorage.setItem("pageNumberComment", num ? num + 1 : 1);
+    window.location.href = "./cn_comments.html";
+  });
+
+  // Add event listener for the change email button
+  const addbackButtonEvent = document.getElementById("back-page-comment");
+  addbackButtonEvent.addEventListener("click", () => {
+    const page = localStorage.getItem("pageNumberComment");
+
+    const num = parseInt(page);
+
+    localStorage.setItem("pageNumberComment", num - 1);
+    window.location.href = "./cn_comments.html";
+  });
 }
 
 main(); // Call main to execute and retrieve the data
 
 async function fetchCurrentUser1() {
   const username = localStorage.getItem("username");
-  console.log("iran");
   const USER_URL = `https://crypto-api-3-6bf97d4979d1.herokuapp.com/users/findProtected/${username}`;
   try {
     const response = await fetch(USER_URL, {
@@ -668,7 +696,6 @@ async function fetchCurrentUser1() {
     }
 
     const data = await response.json();
-    console.log("from within111:", data);
 
     const voteElements = document.querySelectorAll(".cnUpVote");
     voteElements.forEach((voteElement) => {
@@ -689,7 +716,6 @@ async function fetchCurrentUser1() {
       }
     });
     const ReplyVoteElements = document.querySelectorAll(".cnReplyUpVote");
-    console.log("checkcheckcehck:", ReplyVoteElements);
     ReplyVoteElements.forEach((voteElement, index) => {
       if (data.upvotedSubmissions.includes(voteElement.id)) {
         voteElement.style.visibility = "hidden";
@@ -706,41 +732,10 @@ async function fetchCurrentUser1() {
 }
 fetchCurrentUser1();
 
-// async function fetchData() {
-//   try {
-//     const response = await fetch(
-//       "https://crypto-api-3-6bf97d4979d1.herokuapp.com/items",
-//       { mode: "no-cors" }
-//     );
-//     console.log("response", response);
-//     if (!response.ok) {
-//       throw new Error("Network response was not ok");
-//     }
-//     const data = await response.json();
-//     console.log("datat from within:", data);
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     throw error; // Optionally re-throw the error for handling elsewhere
-//   }
-// }
 
-// const res = console.log("FRES", res);
-
-// // Using the function
-// async function main() {
-//   try {
-//     const result = await fetchData();
-//     return result;
-//     console.log(result); // Use the fetched data
-//   } catch (error) {
-//     console.error("Error in main:", error);
-//   }
-// }
 
 // data = main();
 
-// console.log("data:", data);
 
 // const users = [
 //   {
