@@ -1,0 +1,131 @@
+<html lang="en" op="news">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./AI_News_files/news.css">
+    <link rel="icon" href="./AI_News_files/tpp.png">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://news.ycombinator.com/rss">
+    <title>DePIN News</title>
+</head>
+
+
+<body>
+    <center>
+        <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f5f8f8">
+            <tbody>
+                <tr>
+                    <td bgcolor="red">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+                            <tbody>
+                                <tr>
+
+                                    <td style="line-height:12pt; height:18px;"><span class="pagetop"
+                                            style="color: white;"><b class="hnname" style="color: white;"><a
+                                                    style="color: white;" href="./index.html">DePIN
+                                                    News</a></b>
+                                            <a href="./cn_new.html" style="color: white;">new</a> | <a
+                                                style="color: white;" href="./cn_comments.html">comments</a> | <a
+                                                style="color: white;" href="./cn_ask.html">ask</a>
+                                            | <a style="color: white;" href="./cn_show.html">show</a> | <a
+                                                style="color: white;" href="./cn_jobs.html">jobs</a> | <a
+                                                style="color: white;" onclick="clickSubmit()" rel="nofollow">submit</a>
+                                        </span></td>
+                                    <td style="text-align:right;padding-right:4px;"><span class="pagetop"
+                                            style="color: white; display: -webkit-inline-box;">
+                                            <div id="log" style="cursor: pointer;">
+
+                                            </div>
+                                            <a style="padding-left:5px; color: white;cursor: pointer;" id="loginButton"
+                                                onclick="clickLog()"></a>
+                                            <!-- username ? `${username} |` : "login" -->
+                                            <!-- <a style="color: white;" id="me" href="./profile.html">seanmcd311</a> (<span
+                                                style="color: white;" id="karma">1</span>) | <a id="logout"
+                                                rel="nofollow" style="color: white;" href="./login.html">logout</a> -->
+                                        </span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="pagespace" title="" style="height:10px"></tr>
+                <tr>
+                    <td>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <!-- <tr class="athing" id="41790045">
+                                    <td class="ind"></td>
+                                    <td valign="top" class="votelinks">
+                                        <center><a id="up_41790045" class="clicky">
+                                                <span
+                                                    style='font-size:10px; margin-right: 4px;margin-left: 4px;'><img
+                                                    src="./AI_News_files/tpp.png" height="18"
+                                                    style="margin-right:8px;"></span>
+                                            </a></center>
+                                    </td>
+                                    <td class="default">
+                                        <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
+                                                <a class="hnuser">eviks</a> <span class="age"
+                                                    title="2024-10-09T16:55:00.000000Z"><a>6
+                                                        minutes ago</a></span> <span id="unv_41790045"></span> <span
+                                                    class="navs">
+                                                    | <a>parent</a> | <a rel="nofollow">context</a><span
+                                                        class="onstory"> | on: <a>European govt
+                                                            air-gapped systems breached using cu...</a></span> </span>
+                                            </span></div><br>
+                                        <div class="comment">
+                                            <a href="./comment_individual.html">
+                                                <div class="commtext c00">How would you get data or even the OS itself
+                                                    to
+                                                    the machine under your definition?</div>
+                                            </a>
+                                            <div class="reply"></div>
+                                        </div>
+                                    </td>
+                                </tr> -->
+
+                                <div style="margin-left:32px;margin-bottom:10px;" id="nameContainer"></div>
+                                <div id="container" style="margin-left: 1vw;"></div>
+                            </tbody>
+                        </table>
+                        <div id="pagination-controls" style="padding-top: 10px;padding-left: 20px; color: black">
+                            <!-- <button id="prev-page" onclick="changePage(currentPage - 1)">Previous</button> -->
+
+                            <div id="next-page" onclick="changePage(currentPage + 1)"style="visibility: hidden;">More</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="./AI_News_files/s.gif" height="10" width="0">
+                        <table width="100%" cellspacing="0" cellpadding="1">
+                            <tbody>
+                                <tr>
+                                    <td bgcolor="red"></td>
+                                </tr>
+                            </tbody>
+                        </table><br>
+                        <center><br>
+                            <!-- <form method="get" action="https://hn.algolia.com/">Search: <input type="text" name="q" size="17"
+                            autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off"></form> -->
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+    <script>
+        const SelectedUser = localStorage.getItem("SelectedUser");
+        const name = `${SelectedUser}'s Comments:`;
+        document.getElementById("nameContainer").innerHTML = name;
+
+
+    </script>
+    <script type="text/javascript" src="./AI_News_files/hn.js"></script>
+
+</body>
+<script src="header.js">
+</script>
+<script src="indexUserComments.js"></script>
+
+</html>
