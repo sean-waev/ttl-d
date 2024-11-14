@@ -1,0 +1,44 @@
+<html lang="en">
+
+<head>
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./AI_News_files/ETHBlack2.PNG">
+</head>
+
+<body>
+    <b>Login</b><br><br>
+
+        <table border="0">
+            <tr>
+                <td>username:</td>
+                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off" id="username-desci"
+                        autofocus="true"></td>
+            </tr>
+            <tr>
+                <td>password:</td>
+                <td><input type="password" name="pw" size="20" id="password"></td>
+            </tr>
+        </table><br>
+        <button onclick="submitLogin()">Login</button>
+  <a href="forgot">Forgot your password?</a><br><br>
+    <b>Create Account</b><br><br>
+   <input type="hidden"
+            name="creating" value="t">
+        <table border="0">
+            <tr>
+                <td>username:</td>
+                <td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off" id="reg_username">
+                </td>
+            </tr>
+            <tr>
+                <td>password:</td>
+                <td><input type="password" name="pw" size="20" id="reg_password"></td>
+            </tr>
+        </table><br>
+        <button onclick="submitRegister()">Create Account</button>
+</body>
+
+<script src="indexLogin.js"></script>
+
+</html>
