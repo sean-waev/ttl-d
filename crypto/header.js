@@ -3,7 +3,7 @@ let header = (username === "null" || username === null)? "" : `&nbsp${username} 
 let button = (username === "null" || username === null) ? "login" : "Logout";
 // document.getElementById("log").innerText = header;
 document.getElementById("log").innerHTML = ` <div style="display: flex; flex-direction:row;"><a style="color: white;"
-                                                href="https://toptop.love">TopTop </a>&nbsp| <div id="newLog">${header}</div></div>`;
+                                                href="https://toptop.network">TopTop </a>&nbsp| <div id="newLog">${header}</div></div>`;
 document.getElementById("loginButton").innerText = button;
 
   // Add event listener for the change email button
